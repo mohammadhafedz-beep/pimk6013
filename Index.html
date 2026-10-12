@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemarkahan PIMK6013 (GitHub Version)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00A8FF; 
+            --gradient: linear-gradient(135deg, #00A8FF 0%, #0097E6 100%);
+            --bg-color: #F0F8FF; 
+            --card-bg: #FFFFFF;
+            --text-dark: #2F3640;
+            --text-light: #718093;
+            --success: #4CD137; 
+            --accent: #FF9F43;
+            --purple: #9b59b6;
+            --border: #DCDDE1;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 650px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--gradient);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+        .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+
+        .form-content { padding: 30px; }
+        .form-group { margin-bottom: 20px; text-align: justify; }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 15px;
+        }
+
+        select, input[type="number"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            background-color: #F8FAFC;
+        }
+
+        select:focus, input[type="number"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
+        }
+
+        .student-info {
+            display: none; 
+            background-color: #F1F9FE;
+            border: 1px dashed var(--primary);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .info-item {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .info-label { font-size: 10px; text-transform: uppercase; color: var(--text-light); font-weight: 700; display: block; }
+        .info-value { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+
+        .markah-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .markah-box label { font-size: 13px; color: var(--accent); text-align: center; }
+
+        .markah-input {
+            font-size: 20px !important;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .wajaran-box {
+            background-color: #F3E5F5;
+            border: 2px solid var(--purple);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .wajaran-box label { color: var(--purple); font-size: 16px; margin-bottom: 5px; }
+        .wajaran-value { font-size: 28px; font-weight: 700; color: var(--purple); }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover { background: #44BD32; transform: translateY(-2px); }
+        .btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
+        .loader { display: none; text-align: center; color: var(--primary); font-weight: 600; margin-top: 15px; }
+        .success-msg {
+            display: none;
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 20px;
+            border: 1px solid #C8E6C9;
+        }
+        
+        .error-msg {
+            display: none;
+            background: #FFEBEE;
+            color: #C62828;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 20px;
+            border: 1px solid #FFCDD2;
+        }
+
+        @media (max-width: 500px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .markah-grid { grid-template-columns: 1fr; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fa-solid fa-graduation-cap"></i> Pemarkahan PIMK6013</h1>
+        <p>Pengemaskinian Markah & Wajaran</p>
+    </div>
+
+    <div class="form-content">
+        <form id="borangMarkah" onsubmit="hantarData(event)">
+            
+            <div class="form-group">
+                <label><i class="fa-solid fa-search"></i> Cari / Pilih Pelajar</label>
+                <select id="pilihPelajar" onchange="paparMaklumat()" required>
+                    <option value="">⏳ Sedang menyambung ke pangkalan data...</option>
+                </select>
+            </div>
+
+            <!-- Kotak Maklumat & Baris (Row) -->
+            <div class="student-info" id="kotakMaklumat">
+                <input type="hidden" id="val_rowNum">
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">No Kad Pengenalan</span>
+                        <span class="info-value" id="paparan_nokp">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Angka Giliran</span>
+                        <span class="info-value" id="paparan_giliran">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Kelas</span>
+                        <span class="info-value" id="paparan_kelas">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Pensyarah Penilai</span>
+                        <span class="info-value" id="paparan_penilai">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="markah-grid">
+                <div class="markah-box">
+                    <label>Markah HP 1</label>
+                    <input type="number" id="inputMarkah1" class="markah-input" step="0.01" oninput="kiraWajaran()" placeholder="0">
+                </div>
+                <div class="markah-box">
+                    <label>Markah HP 2</label>
+                    <input type="number" id="inputMarkah2" class="markah-input" step="0.01" oninput="kiraWajaran()" placeholder="0">
+                </div>
+                <div class="markah-box">
+                    <label>Markah HP 3</label>
+                    <input type="number" id="inputMarkah3" class="markah-input" step="0.01" oninput="kiraWajaran()" placeholder="0">
+                </div>
+            </div>
+
+            <div class="wajaran-box">
+                <label><i class="fa-solid fa-calculator"></i> Jumlah Wajaran ( / 50 )</label>
+                <div class="wajaran-value" id="paparWajaran">0</div>
+                <input type="hidden" id="val_wajaran" value="0">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-comment-dots"></i> Catatan (Pilihan)</label>
+                <textarea id="inputCatatan" rows="2" placeholder="Ulasan..."></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="btnHantar" disabled>
+                <i class="fa-solid fa-save"></i> Kemaskini Markah
+            </button>
+
+            <div class="loader" id="loading">
+                <i class="fa-solid fa-spinner fa-spin"></i> Memproses data...
+            </div>
+
+            <div class="success-msg" id="mesejBerjaya">
+                <i class="fa-solid fa-check-circle"></i> Markah & Wajaran berjaya disimpan!
+            </div>
+            
+            <div class="error-msg" id="mesejRalat">
+                <i class="fa-solid fa-triangle-exclamation"></i> Gagal berhubung dengan pelayan. Sila cuba lagi.
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 🔴🔴🔴 USTAZ WAJIB MASUKKAN URL WEB APP "/exec" DI SINI 🔴🔴🔴
+    const API_URL = "https://script.google.com/macros/s/GANTIKAN_DENGAN_URL_YANG_BETUL/exec"; 
+    
+    let senaraiPelajar = [];
+
+    // Gunakan fungsi fetch() untuk mengambil data kerana kita di luar persekitaran Google
+    window.onload = function() {
+        muatTurunData();
+    };
+
+    function muatTurunData() {
+        document.getElementById('pilihPelajar').innerHTML = '<option value="">⏳ Menyambung ke pangkalan data...</option>';
+        
+        fetch(API_URL + "?action=getStudents")
+            .then(response => response.json())
+            .then(data => {
+                senaraiPelajar = data;
+                let dropdown = document.getElementById('pilihPelajar');
+                dropdown.innerHTML = '<option value="">-- Sila Pilih Nama Pelajar --</option>';
+                
+                data.forEach((pelajar, indeks) => {
+                    let option = document.createElement('option');
+                    option.value = indeks;
+                    option.text = pelajar.bil + ". " + pelajar.nama + " (" + pelajar.kelas + ")";
+                    dropdown.appendChild(option);
+                });
+                
+                // Aktifkan butang submit setelah data berjaya dimuat turun
+                document.getElementById('btnHantar').disabled = false;
+            })
+            .catch(error => {
+                document.getElementById('pilihPelajar').innerHTML = '<option value="">❌ Ralat menyambung ke server</option>';
+                console.error('Ralat API:', error);
+            });
+    }
+
+    function paparMaklumat() {
+        let indeks = document.getElementById('pilihPelajar').value;
+        let kotak = document.getElementById('kotakMaklumat');
+
+        if(indeks !== "") {
+            let p = senaraiPelajar[indeks];
+            kotak.style.display = 'block';
+
+            document.getElementById('paparan_nokp').innerText = p.nokp || '-';
+            document.getElementById('paparan_giliran').innerText = p.nogiliran || '-';
+            document.getElementById('paparan_kelas').innerText = p.kelas || '-';
+            document.getElementById('paparan_penilai').innerText = p.penilai || '-';
+            document.getElementById('val_rowNum').value = p.rowNum;
+
+            document.getElementById('inputMarkah1').value = p.markah1 || '';
+            document.getElementById('inputMarkah2').value = p.markah2 || '';
+            document.getElementById('inputMarkah3').value = p.markah3 || '';
+            document.getElementById('inputCatatan').value = p.catatan || '';
+            
+            kiraWajaran();
+            document.getElementById('inputMarkah1').focus();
+        } else {
+            kotak.style.display = 'none';
+            document.getElementById('borangMarkah').reset();
+            document.getElementById('paparWajaran').innerText = "0";
+            document.getElementById('val_wajaran').value = "0";
+        }
+    }
+
+    function kiraWajaran() {
+        let m1 = parseFloat(document.getElementById('inputMarkah1').value) || 0;
+        let m2 = parseFloat(document.getElementById('inputMarkah2').value) || 0;
+        let m3 = parseFloat(document.getElementById('inputMarkah3').value) || 0;
+        
+        let jumlah = m1 + m2 + m3;
+        document.getElementById('paparWajaran').innerText = jumlah;
+        document.getElementById('val_wajaran').value = jumlah;
+    }
+
+    function hantarData(e) {
+        e.preventDefault();
+        let baris = document.getElementById('val_rowNum').value;
+        if(!baris) { alert("Sila pilih nama pelajar terlebih dahulu."); return; }
+
+        document.getElementById('btnHantar').disabled = true;
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('mesejBerjaya').style.display = 'none';
+        document.getElementById('mesejRalat').style.display = 'none';
+
+        // Data dibungkus dalam bentuk JSON untuk dihantar ke Google Sheets API
+        let dataHantar = {
+            action: "submitMarkah",
+            rowNum: baris,
+            markah1: document.getElementById('inputMarkah1').value,
+            markah2: document.getElementById('inputMarkah2').value,
+            markah3: document.getElementById('inputMarkah3').value,
+            wajaran: document.getElementById('val_wajaran').value,
+            catatan: document.getElementById('inputCatatan').value
+        };
+
+        // Fungsi POST ke API Google Apps Script
+        fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify(dataHantar)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if(result.status === "success") {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btnHantar').disabled = false;
+                
+                let mesej = document.getElementById('mesejBerjaya');
+                mesej.style.display = 'block';
+
+                document.getElementById('borangMarkah').reset();
+                document.getElementById('kotakMaklumat').style.display = 'none';
+                document.getElementById('pilihPelajar').focus();
+                document.getElementById('paparWajaran').innerText = "0";
+                document.getElementById('val_wajaran').value = "0";
+                
+                // Senyap-senyap muat semula data di belakang supaya sentiasa terkini
+                muatTurunData();
+                
+                setTimeout(() => { mesej.style.display = 'none'; }, 3000);
+            } else {
+                throw new Error("Ralat dari server");
+            }
+        })
+        .catch(error => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('btnHantar').disabled = false;
+            document.getElementById('mesejRalat').style.display = 'block';
+            console.error('Error:', error);
+        });
+    }
+</script>
+</body>
+</html>
+```eof
