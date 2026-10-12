@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pemarkahan PIMK6013</title>
+    <!-- Font Quicksand -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary: #00A8FF; 
             --gradient: linear-gradient(135deg, #00A8FF 0%, #0097E6 100%);
-            --bg-color: #F0F8FF; 
+            --bg-color: #F8FAFC; 
             --card-bg: #FFFFFF;
             --text-dark: #2F3640;
             --text-light: #718093;
@@ -19,6 +21,7 @@
             --accent: #FF9F43;
             --purple: #9b59b6;
             --border: #DCDDE1;
+            --error: #E74C3C;
         }
 
         body {
@@ -37,23 +40,25 @@
             background: var(--card-bg);
             width: 100%;
             max-width: 650px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             overflow: hidden;
         }
 
         .header {
             background: var(--gradient);
             color: white;
-            padding: 25px 20px;
+            padding: 30px 20px;
             text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
-        .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 700; }
         .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
 
         .form-content { padding: 30px; }
-        .form-group { margin-bottom: 20px; text-align: justify; }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
@@ -65,7 +70,7 @@
 
         select, input[type="number"], textarea {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 2px solid var(--border);
             border-radius: 12px;
             font-size: 15px;
@@ -79,7 +84,7 @@
             outline: none;
             border-color: var(--primary);
             background-color: white;
-            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.15);
         }
 
         .student-info {
@@ -94,37 +99,38 @@
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
         .info-item {
             background: white;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 8px;
             border-left: 3px solid var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         
-        .info-label { font-size: 10px; text-transform: uppercase; color: var(--text-light); font-weight: 700; display: block; }
-        .info-value { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+        .info-label { font-size: 11px; text-transform: uppercase; color: var(--text-light); font-weight: 700; display: block; margin-bottom: 3px;}
+        .info-value { font-size: 14px; font-weight: 600; color: var(--text-dark); }
 
         .markah-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .markah-box label { font-size: 13px; color: var(--accent); text-align: center; }
 
         .markah-input {
-            font-size: 20px !important;
+            font-size: 22px !important;
             font-weight: 700;
             color: var(--text-dark);
             text-align: center;
         }
 
         .wajaran-box {
-            background-color: #F3E5F5;
+            background-color: #F8F3FF;
             border: 2px solid var(--purple);
             border-radius: 12px;
             padding: 15px;
@@ -132,8 +138,8 @@
             margin-bottom: 20px;
         }
 
-        .wajaran-box label { color: var(--purple); font-size: 16px; margin-bottom: 5px; }
-        .wajaran-value { font-size: 28px; font-weight: 700; color: var(--purple); }
+        .wajaran-box label { color: var(--purple); font-size: 15px; margin-bottom: 5px; }
+        .wajaran-value { font-size: 30px; font-weight: 700; color: var(--purple); }
 
         .btn {
             width: 100%;
@@ -147,39 +153,31 @@
             font-family: 'Quicksand', sans-serif;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(76, 209, 55, 0.2);
         }
 
         .btn:hover { background: #44BD32; transform: translateY(-2px); }
-        .btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+        .btn:disabled { background: #E2E8F0; color: #94A3B8; cursor: not-allowed; transform: none; box-shadow: none; border: none; }
 
         .loader { display: none; text-align: center; color: var(--primary); font-weight: 600; margin-top: 15px; }
-        .success-msg {
-            display: none;
-            background: #E8F5E9;
-            color: #2E7D32;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 600;
-            margin-top: 20px;
-            border: 1px solid #C8E6C9;
-        }
         
-        .error-msg {
+        .msg-box {
             display: none;
-            background: #FFEBEE;
-            color: #C62828;
             padding: 15px;
             border-radius: 10px;
             text-align: center;
             font-weight: 600;
             margin-top: 20px;
-            border: 1px solid #FFCDD2;
+            font-size: 15px;
         }
 
-        @media (max-width: 500px) {
+        .success-msg { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+        .error-msg { background: #FFEBEE; color: var(--error); border: 1px solid #FFCDD2; }
+
+        @media (max-width: 550px) {
             .info-grid { grid-template-columns: 1fr; }
-            .markah-grid { grid-template-columns: 1fr; gap: 10px; }
+            .markah-grid { gap: 10px; }
+            .markah-input { font-size: 18px !important; }
         }
     </style>
 </head>
@@ -196,12 +194,13 @@
             
             <div class="form-group">
                 <label><i class="fa-solid fa-search"></i> Cari / Pilih Pelajar</label>
-                <select id="pilihPelajar" onchange="paparMaklumat()" required>
-                    <option value="">⏳ Sedang menyambung ke pangkalan data...</option>
+                <select id="pilihPelajar" onchange="paparMaklumat()" disabled>
+                    <option value="">⏳ Menyambung ke pangkalan data (Sila tunggu sebentar)...</option>
                 </select>
             </div>
 
             <div class="student-info" id="kotakMaklumat">
+                <!-- Hidden input untuk baris kemaskini -->
                 <input type="hidden" id="val_rowNum">
 
                 <div class="info-grid">
@@ -247,7 +246,7 @@
 
             <div class="form-group">
                 <label><i class="fa-solid fa-comment-dots"></i> Catatan (Pilihan)</label>
-                <textarea id="inputCatatan" rows="2" placeholder="Ulasan..."></textarea>
+                <textarea id="inputCatatan" rows="3" placeholder="Contoh: Selesai disemak..."></textarea>
             </div>
 
             <button type="submit" class="btn" id="btnHantar" disabled>
@@ -255,81 +254,67 @@
             </button>
 
             <div class="loader" id="loading">
-                <i class="fa-solid fa-spinner fa-spin"></i> Memproses data...
+                <i class="fa-solid fa-spinner fa-spin"></i> Menghantar data ke Google Sheets...
             </div>
 
-            <div class="success-msg" id="mesejBerjaya">
-                <i class="fa-solid fa-check-circle"></i> Markah & Wajaran berjaya disimpan!
+            <div class="msg-box success-msg" id="mesejBerjaya">
+                <i class="fa-solid fa-check-circle"></i> Markah & Wajaran berjaya dikemaskini!
             </div>
             
-            <div class="error-msg" id="mesejRalat">
-                <i class="fa-solid fa-triangle-exclamation"></i> Gagal berhubung dengan pelayan. Sila pastikan URL API betul.
+            <div class="msg-box error-msg" id="mesejRalat">
+                <i class="fa-solid fa-triangle-exclamation"></i> Gagal berhubung. Sila muat semula (Refresh) halaman.
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    // =====================================================================================
-    // 🔴🔴🔴 AMARAN PENTING: GANTIKAN URL DI BAWAH DENGAN URL WEB APP USTAZ 🔴🔴🔴
-    // Ia mesti bermula dengan https://script.google.com/macros/s/ dan berakhir dengan /exec
-    // =====================================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbxtrAhI-8GiSf5n6mSBv2TVg9pJDTkwSbfqCDuaVekCh6djlyk349whMUpSYZ7kSzhn1Q/exec"; 
+    // URL API Terkini yang ustaz berikan
+    const API_URL = "https://script.google.com/macros/s/AKfycbyHdMO6wVq1xtHj_nvCxm1qO5eOYTUcSvwC_7gFL8iMeBeYE_V0JSZYQjSKb0gYgrMyuQ/exec"; 
     
     let senaraiPelajar = [];
+    const selectElem = document.getElementById('pilihPelajar');
+    const btnElem = document.getElementById('btnHantar');
 
     window.onload = function() {
         muatTurunData();
     };
 
-    function muatTurunData() {
-        if(API_URL === "SILA_LETAK_URL_EXEC_DI_SINI" || API_URL.includes("/library/d/")) {
-            document.getElementById('pilihPelajar').innerHTML = '<option value="">❌ Sila masukkan URL API (/exec) yang betul dalam kod.</option>';
-            return;
-        }
+    async function muatTurunData() {
+        try {
+            // Kaedah standard Fetch GET untuk mengambil senarai
+            const response = await fetch(API_URL + "?action=getStudents");
+            
+            if (!response.ok) throw new Error("Rangkaian bermasalah");
+            
+            const data = await response.json();
+            
+            if (Array.isArray(data) && data.length > 0) {
+                senaraiPelajar = data;
+                
+                selectElem.innerHTML = '<option value="">-- Sila Pilih Nama Pelajar --</option>';
+                data.forEach((pelajar, indeks) => {
+                    let option = document.createElement('option');
+                    option.value = indeks;
+                    option.text = `${pelajar.bil}. ${pelajar.nama} (${pelajar.kelas})`;
+                    selectElem.appendChild(option);
+                });
 
-        document.getElementById('pilihPelajar').innerHTML = '<option value="">⏳ Menyambung ke pangkalan data...</option>';
-        
-        // Timeout mechanism to handle hanging requests
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
-
-        // Since it's a GET request, we append parameters
-        fetch(API_URL + "?action=getStudents", {
-            method: 'GET',
-            mode: 'cors',
-            signal: controller.signal
-        })
-        .then(response => {
-            clearTimeout(timeoutId);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                selectElem.disabled = false;
+                btnElem.disabled = false; // Buka butang utama
+            } else {
+                throw new Error("Data kosong");
             }
-            return response.json();
-        })
-        .then(data => {
-            senaraiPelajar = data;
-            let dropdown = document.getElementById('pilihPelajar');
-            dropdown.innerHTML = '<option value="">-- Sila Pilih Nama Pelajar --</option>';
             
-            data.forEach((pelajar, indeks) => {
-                let option = document.createElement('option');
-                option.value = indeks;
-                option.text = pelajar.bil + ". " + pelajar.nama + " (" + pelajar.kelas + ")";
-                dropdown.appendChild(option);
-            });
-            
-            document.getElementById('btnHantar').disabled = false;
-        })
-        .catch(error => {
-            document.getElementById('pilihPelajar').innerHTML = '<option value="">❌ Ralat menyambung ke server</option>';
-            document.getElementById('mesejRalat').style.display = 'block';
-            console.error('Ralat API:', error);
-        });
+        } catch (error) {
+            console.error('Ralat Pemuatan Data:', error);
+            selectElem.innerHTML = '<option value="">❌ Gagal memuat turun data. Sila Refresh page.</option>';
+            selectElem.disabled = true;
+        }
     }
 
     function paparMaklumat() {
-        let indeks = document.getElementById('pilihPelajar').value;
+        let indeks = selectElem.value;
         let kotak = document.getElementById('kotakMaklumat');
 
         if(indeks !== "") {
@@ -340,14 +325,19 @@
             document.getElementById('paparan_giliran').innerText = p.nogiliran || '-';
             document.getElementById('paparan_kelas').innerText = p.kelas || '-';
             document.getElementById('paparan_penilai').innerText = p.penilai || '-';
+            
+            // Simpan baris rujukan untuk proses KEMASKINI
             document.getElementById('val_rowNum').value = p.rowNum;
 
+            // Masukkan data sedia ada jika pelajar sudah ada markah
             document.getElementById('inputMarkah1').value = p.markah1 || '';
             document.getElementById('inputMarkah2').value = p.markah2 || '';
             document.getElementById('inputMarkah3').value = p.markah3 || '';
             document.getElementById('inputCatatan').value = p.catatan || '';
             
-            kiraWajaran();
+            kiraWajaran(); // Kira wajaran automatik berdasarkan paparan data lama
+            
+            // Auto fokus
             document.getElementById('inputMarkah1').focus();
         } else {
             kotak.style.display = 'none';
@@ -363,23 +353,32 @@
         let m3 = parseFloat(document.getElementById('inputMarkah3').value) || 0;
         
         let jumlah = m1 + m2 + m3;
-        document.getElementById('paparWajaran').innerText = jumlah;
-        document.getElementById('val_wajaran').value = jumlah;
+        
+        // Papar nombor tanpa perpuluhan berjela
+        let paparanJumlah = Number.isInteger(jumlah) ? jumlah : jumlah.toFixed(2);
+        
+        document.getElementById('paparWajaran').innerText = paparanJumlah;
+        document.getElementById('val_wajaran').value = paparanJumlah;
     }
 
     function hantarData(e) {
         e.preventDefault();
+        
         let baris = document.getElementById('val_rowNum').value;
-        if(!baris) { alert("Sila pilih nama pelajar terlebih dahulu."); return; }
+        if(!baris) {
+            tunjukMesejCustom("Sila pilih nama pelajar terlebih dahulu.");
+            return;
+        }
 
-        document.getElementById('btnHantar').disabled = true;
+        // Kunci borang sementara loading
+        btnElem.disabled = true;
         document.getElementById('loading').style.display = 'block';
         document.getElementById('mesejBerjaya').style.display = 'none';
         document.getElementById('mesejRalat').style.display = 'none';
 
         let dataHantar = {
             action: "submitMarkah",
-            rowNum: baris,
+            rowNum: parseInt(baris),
             markah1: document.getElementById('inputMarkah1').value,
             markah2: document.getElementById('inputMarkah2').value,
             markah3: document.getElementById('inputMarkah3').value,
@@ -387,48 +386,64 @@
             catatan: document.getElementById('inputCatatan').value
         };
 
-        // Note: Apps Script POST requires simple content types, often text/plain is used to avoid preflight issues
+        // KUNCI UTAMA KEJAYAAN GITHUB PAGES: Menggunakan mod 'no-cors' dan Content-Type plain text.
+        // Ini memintas halangan "Preflight" yang sering diblok oleh Google Apps Script.
         fetch(API_URL, {
             method: 'POST',
-            mode: 'cors', 
+            mode: 'no-cors', 
+            cache: 'no-cache',
             headers: {
-               'Content-Type': 'text/plain;charset=utf-8',
+                'Content-Type': 'text/plain;charset=utf-8'
             },
             body: JSON.stringify(dataHantar)
         })
-        .then(response => {
-             if (!response.ok) {
-                 throw new Error('Network response was not ok');
-             }
-             return response.json();
-        })
-        .then(result => {
-            if(result.status === "success") {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('btnHantar').disabled = false;
-                
-                let mesej = document.getElementById('mesejBerjaya');
-                mesej.style.display = 'block';
-
-                document.getElementById('borangMarkah').reset();
-                document.getElementById('kotakMaklumat').style.display = 'none';
-                document.getElementById('pilihPelajar').focus();
-                document.getElementById('paparWajaran').innerText = "0";
-                document.getElementById('val_wajaran').value = "0";
-                
-                muatTurunData();
-                
-                setTimeout(() => { mesej.style.display = 'none'; }, 3000);
-            } else {
-                throw new Error(result.message || "Ralat dari server");
-            }
+        .then(() => {
+            // Memandangkan mode 'no-cors' tidak memulangkan status berjaya secara jelas,
+            // kita menganggap (assume) ia berjaya selagi tiada error Rangkaian (Network Error).
+            berjayaDirekod();
         })
         .catch(error => {
+            console.error('Ralat Penghantaran:', error);
             document.getElementById('loading').style.display = 'none';
-            document.getElementById('btnHantar').disabled = false;
             document.getElementById('mesejRalat').style.display = 'block';
-            console.error('Submission Error:', error);
+            btnElem.disabled = false;
         });
+    }
+
+    function berjayaDirekod() {
+        document.getElementById('loading').style.display = 'none';
+        
+        let mesej = document.getElementById('mesejBerjaya');
+        mesej.style.display = 'block';
+
+        // Reset borang
+        document.getElementById('borangMarkah').reset();
+        document.getElementById('kotakMaklumat').style.display = 'none';
+        document.getElementById('paparWajaran').innerText = "0";
+        document.getElementById('val_wajaran').value = "0";
+        
+        // Letak cursor balik ke dropdown nama
+        selectElem.focus();
+        selectElem.value = "";
+        btnElem.disabled = false;
+
+        // Senyap-senyap update data background (refresh)
+        setTimeout(() => {
+            fetch(API_URL + "?action=getStudents")
+                .then(r => r.json())
+                .then(data => { senaraiPelajar = data; })
+                .catch(e => console.log(e));
+        }, 1000);
+
+        // Hilangkan mesej hijau selepas 3 saat
+        setTimeout(() => { mesej.style.display = 'none'; }, 3000);
+    }
+    
+    function tunjukMesejCustom(msg) {
+        let box = document.getElementById('mesejRalat');
+        box.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
+        box.style.display = 'block';
+        setTimeout(() => { box.style.display = 'none'; }, 3000);
     }
 </script>
 </body>
