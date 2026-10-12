@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pemarkahan PIMK6013 (GitHub Version)</title>
+    <title>Pemarkahan PIMK6013</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -201,7 +201,6 @@
                 </select>
             </div>
 
-            <!-- Kotak Maklumat & Baris (Row) -->
             <div class="student-info" id="kotakMaklumat">
                 <input type="hidden" id="val_rowNum">
 
@@ -264,47 +263,69 @@
             </div>
             
             <div class="error-msg" id="mesejRalat">
-                <i class="fa-solid fa-triangle-exclamation"></i> Gagal berhubung dengan pelayan. Sila cuba lagi.
+                <i class="fa-solid fa-triangle-exclamation"></i> Gagal berhubung dengan pelayan. Sila pastikan URL API betul.
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    // 🔴🔴🔴 USTAZ WAJIB MASUKKAN URL WEB APP "/exec" DI SINI 🔴🔴🔴
-    const API_URL = "https://script.google.com/macros/library/d/1W_oTrWYbSZUeDHcbqQboz8EzZ-jGmNWThlotlbDf8BZiMmv575cbcFwG/17"; 
+    // =====================================================================================
+    // 🔴🔴🔴 AMARAN PENTING: GANTIKAN URL DI BAWAH DENGAN URL WEB APP USTAZ 🔴🔴🔴
+    // Ia mesti bermula dengan https://script.google.com/macros/s/ dan berakhir dengan /exec
+    // =====================================================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbxtrAhI-8GiSf5n6mSBv2TVg9pJDTkwSbfqCDuaVekCh6djlyk349whMUpSYZ7kSzhn1Q/exec"; 
     
     let senaraiPelajar = [];
 
-    // Gunakan fungsi fetch() untuk mengambil data kerana kita di luar persekitaran Google
     window.onload = function() {
         muatTurunData();
     };
 
     function muatTurunData() {
+        if(API_URL === "SILA_LETAK_URL_EXEC_DI_SINI" || API_URL.includes("/library/d/")) {
+            document.getElementById('pilihPelajar').innerHTML = '<option value="">❌ Sila masukkan URL API (/exec) yang betul dalam kod.</option>';
+            return;
+        }
+
         document.getElementById('pilihPelajar').innerHTML = '<option value="">⏳ Menyambung ke pangkalan data...</option>';
         
-        fetch(API_URL + "?action=getStudents")
-            .then(response => response.json())
-            .then(data => {
-                senaraiPelajar = data;
-                let dropdown = document.getElementById('pilihPelajar');
-                dropdown.innerHTML = '<option value="">-- Sila Pilih Nama Pelajar --</option>';
-                
-                data.forEach((pelajar, indeks) => {
-                    let option = document.createElement('option');
-                    option.value = indeks;
-                    option.text = pelajar.bil + ". " + pelajar.nama + " (" + pelajar.kelas + ")";
-                    dropdown.appendChild(option);
-                });
-                
-                // Aktifkan butang submit setelah data berjaya dimuat turun
-                document.getElementById('btnHantar').disabled = false;
-            })
-            .catch(error => {
-                document.getElementById('pilihPelajar').innerHTML = '<option value="">❌ Ralat menyambung ke server</option>';
-                console.error('Ralat API:', error);
+        // Timeout mechanism to handle hanging requests
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
+
+        // Since it's a GET request, we append parameters
+        fetch(API_URL + "?action=getStudents", {
+            method: 'GET',
+            mode: 'cors',
+            signal: controller.signal
+        })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            senaraiPelajar = data;
+            let dropdown = document.getElementById('pilihPelajar');
+            dropdown.innerHTML = '<option value="">-- Sila Pilih Nama Pelajar --</option>';
+            
+            data.forEach((pelajar, indeks) => {
+                let option = document.createElement('option');
+                option.value = indeks;
+                option.text = pelajar.bil + ". " + pelajar.nama + " (" + pelajar.kelas + ")";
+                dropdown.appendChild(option);
             });
+            
+            document.getElementById('btnHantar').disabled = false;
+        })
+        .catch(error => {
+            document.getElementById('pilihPelajar').innerHTML = '<option value="">❌ Ralat menyambung ke server</option>';
+            document.getElementById('mesejRalat').style.display = 'block';
+            console.error('Ralat API:', error);
+        });
     }
 
     function paparMaklumat() {
@@ -356,7 +377,6 @@
         document.getElementById('mesejBerjaya').style.display = 'none';
         document.getElementById('mesejRalat').style.display = 'none';
 
-        // Data dibungkus dalam bentuk JSON untuk dihantar ke Google Sheets API
         let dataHantar = {
             action: "submitMarkah",
             rowNum: baris,
@@ -367,12 +387,21 @@
             catatan: document.getElementById('inputCatatan').value
         };
 
-        // Fungsi POST ke API Google Apps Script
+        // Note: Apps Script POST requires simple content types, often text/plain is used to avoid preflight issues
         fetch(API_URL, {
             method: 'POST',
+            mode: 'cors', 
+            headers: {
+               'Content-Type': 'text/plain;charset=utf-8',
+            },
             body: JSON.stringify(dataHantar)
         })
-        .then(response => response.json())
+        .then(response => {
+             if (!response.ok) {
+                 throw new Error('Network response was not ok');
+             }
+             return response.json();
+        })
         .then(result => {
             if(result.status === "success") {
                 document.getElementById('loading').style.display = 'none';
@@ -387,22 +416,20 @@
                 document.getElementById('paparWajaran').innerText = "0";
                 document.getElementById('val_wajaran').value = "0";
                 
-                // Senyap-senyap muat semula data di belakang supaya sentiasa terkini
                 muatTurunData();
                 
                 setTimeout(() => { mesej.style.display = 'none'; }, 3000);
             } else {
-                throw new Error("Ralat dari server");
+                throw new Error(result.message || "Ralat dari server");
             }
         })
         .catch(error => {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('btnHantar').disabled = false;
             document.getElementById('mesejRalat').style.display = 'block';
-            console.error('Error:', error);
+            console.error('Submission Error:', error);
         });
     }
 </script>
 </body>
 </html>
-```eof
